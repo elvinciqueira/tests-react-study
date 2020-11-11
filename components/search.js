@@ -1,6 +1,7 @@
-export default function Search({ doSearch }) {
+export default function Search() {
   return (
     <form
+      data-testid="search"
       name="search-form"
       className="relative mt-6 max-w-lg mx-auto"
     >
