@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export function useFetchProducts() {
+export const useFetchProducts = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(false);
 
@@ -18,6 +18,7 @@ export function useFetchProducts() {
         }
         
       } catch (error) {
+        /* istanbul ignore next */ 
         if (mounted) {
           setError(true);      
         }
@@ -30,4 +31,4 @@ export function useFetchProducts() {
   }, []);
 
   return { products, error };
-}
+};
