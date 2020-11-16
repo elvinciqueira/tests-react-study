@@ -1,4 +1,6 @@
-import { screen, render, waitFor } from "@testing-library/react"
+import { screen, render, waitFor, fireEvent } from "@testing-library/react"
+import Response from 'miragejs';
+import userEvent from '@testing-library/user-event';
 
 import { makeServer } from '../miragejs/server';
 import ProductList from "../pages"
@@ -30,5 +32,49 @@ describe("ProductList", () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('product-card')).toHaveLength(10);
     });
+  });
+
+  it('should render the "no product message"', async () => {
+    renderProductList();
+
+    await waitFor(() => expect(screen.getByTestId('no-products')).toBeInTheDocument());
+  });
+
+  it('should display error message when promisse rejects', async () => {
+    server.get('products', () => new Response(500, {}, ''));
+    
+    renderProductList();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('server-error')).toBeInTheDocument();
+      expect(screen.queryByTestId('no-products')).toBeNull();
+      expect(screen.queryAllByTestId('product-card')).toHaveLength(0);
+    });
+  });
+
+  it('should filter the product list when a search is performed', async () => {
+    const searchTerm = 'Relógio bonito';
+    
+    server.createList('product', 2);
+
+    server.create('product', {
+      title: searchTerm,
+    });
+
+    renderProductList();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('product-card')).toHaveLength(3);
+    });
+
+    const form = screen.getByRole('form');
+    const input = screen.getByRole('searchbox');
+
+    await userEvent.type(input, searchTerm);
+    await fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('product-card')).toHaveLength(1);
+    });    
   });
 });
