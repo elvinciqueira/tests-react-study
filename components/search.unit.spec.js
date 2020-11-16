@@ -4,25 +4,27 @@ import userEvent from '@testing-library/user-event';
 
 const doSearch = jest.fn();
 
+const renderSearchComponent = () => render(<Search doSearch={doSearch} />);
+
 describe('Search', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should render a form', () => {
-    render(<Search doSearch={doSearch} />);
+    renderSearchComponent();
 
     expect(screen.getByRole('form')).toBeInTheDocument();
   });
 
   it('should render a input type equals search', () => {
-    render(<Search doSearch={doSearch} />);
+    renderSearchComponent();
 
     expect(screen.getByRole('searchbox')).toHaveProperty('type', 'search');
   });
 
   it('should call props.doSearch() when form is submitted', async () => {
-    render(<Search doSearch={doSearch} />);
+    renderSearchComponent();
 
     const form = screen.getByRole('form');
     
@@ -32,7 +34,7 @@ describe('Search', () => {
   });
 
   it('should call props.doSearch() with the user input', async () => {
-    render(<Search doSearch={doSearch} />);
+    renderSearchComponent();
     
     const inputText = 'some text';
     const form = screen.getByRole('form');
@@ -45,7 +47,7 @@ describe('Search', () => {
   });
 
   it('should call doSearch when search input is cleared', async () => {
-    render(<Search doSearch={doSearch} />);
+    renderSearchComponent();    
     
     const inputText = 'some text';
     const input = screen.getByRole('searchbox');
