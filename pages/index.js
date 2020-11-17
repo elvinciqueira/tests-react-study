@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useFetchProducts } from '../hooks/useFetchProducts';
 import ProductCard from '../components/product-card';
 import Search from '../components/search';
+import { useCartStore } from '../store/cart';
 
 export default function Home() {
   const { products, error } = useFetchProducts();
-
   const [term, setTerm] = useState('');
   const [localProducts, setLocalProducts] = useState([]);
+  const addToCart = useCartStore(store => store.actions.add);
 
   useEffect(() => {
     if (term === '') {
@@ -25,7 +26,7 @@ export default function Home() {
     }
     
     return localProducts.map(product => (
-      <ProductCard key={product.id} product={product} />
+      <ProductCard key={product.id} product={product} addToCart={addToCart} />
     ));
   };
 
