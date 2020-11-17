@@ -15,7 +15,7 @@ export default function Home() {
     } else {
       setLocalProducts(products.filter(({ title }) => {
         return title.toLowerCase().indexOf(term.toLowerCase()) > -1;
-      }))
+      }));
     }
   }, [products, term]);
 
