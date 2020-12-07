@@ -4,7 +4,7 @@ import { useCartStore } from '../store/cart';
 
 export default function CartItem({ product }) {
   const [quantity, setQuantity] = useState(1);
-  const {toggle} = useCartStore(store => store.actions);
+  const {remove} = useCartStore(store => store.actions);
   
   const increase = () => setQuantity(quantity + 1);
   
